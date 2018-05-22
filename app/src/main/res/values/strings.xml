@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">干货屋</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_base">BaseActivity</string>
+
+    <string name="navigation_home">主页</string>
+    <string name="navigation_news">头条</string>
+    <string name="navigation_weather">天气</string>
+    <string name="navigation_express">快递</string>
+    <string name="navigation_me">我</string>
+
+    <string name="action_share">分享</string>
+    <string name="action_collect">收藏</string>
+    <string name="action_download">下载</string>
+    <string name="action_search">搜索</string>
+
+    <!--error-->
+    <string name="no_network">网络不给力，请检查网络设置。</string>
+    <string name="network_error">服务端异常，请稍后再试</string>
+</resources>
