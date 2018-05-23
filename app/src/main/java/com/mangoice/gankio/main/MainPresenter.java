@@ -10,6 +10,7 @@ import com.mangoice.gankio.net.NetManager;
 import com.mangoice.gankio.utils.ResourceHelper;
 import com.mangoice.gankio.utils.ToastWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -23,21 +24,60 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenter implements MainContract.Presenter {
     private MainContract.View mView;
-    private List<GankModel> mList;
+    private List<GankModel.ResultsBean> mList = new ArrayList<>();
 
     public MainPresenter() {
 
     }
 
     @Override
-    public void loadFirstData(String category, int pageSize, int page) {
+    public void loadData(String category, int pageSize, int page, final int loadMoreType) {
+        Api api = NetManager.getInstance().getApiService();
+        api.getGankData(category, Constant.PAGE_SIZE, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<GankModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onNext(@NonNull GankModel gankModel) {
+                        if (gankModel.getError()) {
+                            ToastWrapper.makeShortToast(ResourceHelper.getString(R.string.network_error));
+                            return;
+                        }
+                        if (Constant.GET_DATA_TYPE_NORMAL == loadMoreType) {
+                            mList.clear();
+                            mList = gankModel.getResults();
+                            mView.setFirstData(mList, Constant.GET_DATA_TYPE_NORMAL);
+                            mView.hideLoading();
+                            mView.hideRefresh();
+                        } else {
+                            //加载更多
+                            mList.addAll(gankModel.getResults());
+                            mView.setLoadMoreData(mList);
+                            mView.hideLoading();
+                            mView.hideRefresh();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        mView.hideLoading();
+                        mView.hideRefresh();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.hideRefresh();
+                        mView.hideLoading();
+                    }
+                });
     }
 
-    @Override
-    public void loadMoreData() {
 
-    }
 
     @Override
     public void attachView(MainContract.View view) {

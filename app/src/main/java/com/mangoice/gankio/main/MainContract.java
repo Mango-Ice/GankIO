@@ -13,17 +13,14 @@ import java.util.List;
 public interface MainContract {
     interface View extends BaseView {
         //首次加载数据
-        void setFirstData(GankModel gankModel, int type);
+        void setFirstData(List<GankModel.ResultsBean> list, int type);
         //底部加载更多
-        void setLoadMoreData(List<GankModel> list);
+        void setLoadMoreData(List<GankModel.ResultsBean> list);
         //showToast
         void showToast(String msg);
     }
 
     interface Presenter extends BasePresenter<View> {
-        //加载首次数据
-        void loadFirstData(String category, int pageSize, int page);
-        //加载更多数据
-        void loadMoreData();
+        void loadData(String category, int pageSize, int page, int loadMoreType);
     }
 }

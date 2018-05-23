@@ -42,9 +42,9 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseViewHolder
     public BaseAdapter.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         if (mItemType == Constant.ITEM_TYPE_GANK_TEXT) {
-            view = LayoutInflater.from(mCotext).inflate(R.layout.item_base_fragment, parent, false);
+            view = LayoutInflater.from(mCotext).inflate(R.layout.item_gank_rv, parent, false);
         } else {
-            view = LayoutInflater.from(mCotext).inflate(R.layout.item_image_fragment, parent, false);
+            view = LayoutInflater.from(mCotext).inflate(R.layout.item_gank_girl_rv, parent, false);
         }
         return new BaseViewHolder(view);
     }

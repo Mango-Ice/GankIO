@@ -1,8 +1,13 @@
 package com.mangoice.gankio.news;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.mangoice.gankio.R;
+import com.mangoice.gankio.adapter.GankAdapter;
+import com.mangoice.gankio.adapter.NewsAdapter;
 import com.mangoice.gankio.base.BaseFragment;
 import com.mangoice.gankio.common.Constant;
 import com.mangoice.gankio.model.NewsModel;
@@ -25,9 +30,11 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class NewsFragment extends BaseFragment<NewsContract.View, NewsPresenter> implements NewsContract.View {
-    private Map<String, String> options = new HashMap<>();
+
     private String type;
     private List<NewsModel.Data> mList = new ArrayList<>();
+    private NewsAdapter mNewsAdapter;
+    private int page = 1;
 
     @Override
     public NewsPresenter createPresenter() {
@@ -45,10 +52,25 @@ public class NewsFragment extends BaseFragment<NewsContract.View, NewsPresenter>
     }
 
     @Override
+    protected int getContentLayout() {
+        return R.layout.fragment_base;
+    }
+
+    @Override
+    protected RecyclerView.Adapter setRVAdapter() {
+        mNewsAdapter = new NewsAdapter(R.layout.item_news_rv, mList, mContext);
+        mNewsAdapter.setEnableLoadMore(true);
+        mNewsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        return mNewsAdapter;
+    }
+
+    @Override
     protected void initOptions() {
         if (getArguments() != null) {
             type = getArguments().getString("type");
         }
+        presenter.loadData(type, page, Constant.GET_DATA_TYPE_NORMAL);
+        page++;
     }
 
     public static NewsFragment newInstance(String type) {
@@ -59,103 +81,14 @@ public class NewsFragment extends BaseFragment<NewsContract.View, NewsPresenter>
         return fragment;
     }
 
-    /**
-     * 固定下options
-     */
-    private void setOptions() {
-        options.clear();
-        options.put("category", Constant.CATEGORY_NEWS_HOT);     //Category
-        options.put("refer", String.valueOf(1));
-        options.put("count", String.valueOf(Constant.PAGE_SIZE));
-        options.put("min_behot_time", String.valueOf(TimeUtils.getNowMills() - 100));
-        options.put("last_refresh_sub_entrance_interval", String.valueOf(TimeUtils.getNowMills()));
-        options.put("loc_mode", String.valueOf(6));
-        options.put("loc_time", String.valueOf(TimeUtils.getNowMills()));
-        options.put("latitude", String.valueOf(28.687511709859));
-        options.put("longitude", String.valueOf(116.02067822305));
-        options.put("city", "Beijing");
-        options.put("tt_from", "");
-        options.put("lac", "");
-        options.put("cid", "");
-        options.put("cp", "");
-        options.put("iid", "5463251478");
-        options.put("device_id", "12345678952");
-        options.put("ac", "");
-        options.put("channel", "");
-        options.put("aid", "");
-        options.put("app_name", "");
-        options.put("version_code", "");
-        options.put("version_name", "");
-        options.put("device_platform", "");
-        options.put("ab_version", "");
-        options.put("ab_client", "");
-        options.put("ab_group", "");
-        options.put("ab_feature", "");
-        options.put("abflag", "");
-        options.put("ssmix", "");
-        options.put("device_type", "");
-        options.put("device_brand", "");
-        options.put("language", "");
-        options.put("os_api", "");
-        options.put("os_version", "");
-        options.put("openudid", "123456789d36d6z6");
-        options.put("manifest_version_code", "");
-        options.put("resolution", "");
-        options.put("dpi", "");
-        options.put("update_version_code", "");
-        options.put("_rticket", "");
-
+    @Override
+    public void setFirstData(List<NewsModel.Data> list, int type) {
+        mNewsAdapter.addData(list);
     }
 
-
-    public void getData(final int type) {
-        Api api = NetManager.getInstance().getNewsApiService();
-        setOptions();
-        api.getNewsData(options)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<NewsModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(NewsModel newsModel) {
-                        if (Constant.GET_DATA_TYPE_NORMAL == type) {
-                            mList.clear();
-                            mList = newsModel.getData();
-
-                        } else {
-                            //加载更多模式
-                            mList.addAll(newsModel.getData());
-                        }
-                        if (newsModel.getData().size() < Constant.PAGE_SIZE) {
-                            isLoadMore = false;
-                        }
-                        Log.d("NewsFragment :::::::", String.valueOf(mList.get(0).getContent().getTitle()));
-                        Log.d("NewsFragment :::::::", String.valueOf(mList.get(1).getContent().getTitle()));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("NewsFragment :::::::", e.toString());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
 
     @Override
-    public void setFirstData(NewsModel newsModel, int type) {
-
-    }
-
-    @Override
-    public void setLoadMoreData(List<NewsModel> list) {
+    public void setLoadMoreData(List<NewsModel.Data> list) {
 
     }
 

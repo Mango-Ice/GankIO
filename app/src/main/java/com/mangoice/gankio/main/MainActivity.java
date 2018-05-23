@@ -56,6 +56,7 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
         mPagerAdapter.addFragment(NewsFragment.newInstance(Constant.CATEGORY_NEWS_ENTERTAINMENT), "娱乐");
         mPagerAdapter.addFragment(NewsFragment.newInstance(Constant.CATEGORY_NEWS_QA), "问答");
         mPagerAdapter.addFragment(NewsFragment.newInstance(Constant.CATEGORY_NEWS_TECH), "科技");
+
         mViewPager.setAdapter(mPagerAdapter);
     }
 
@@ -76,11 +77,12 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
                         return true;
                     case R.id.navigation_news:
                         initNewsViewPager();
-//                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                        ft.replace(R.id.fragment, mPagerAdapter.getItem(0));
-//                        ft.commit();
-                        NewsFragment.newInstance(Constant.CATEGORY_NEWS_HOT).getData(Constant.GET_DATA_TYPE_NORMAL);
-                        //mViewPager.setCurrentItem(0);
+
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.hide(mPagerAdapter.getIte)
+                        ft.show(R.id.fragment, mPagerAdapter.getItem(0));
+/                       ft.commit();
+                        mViewPager.setCurrentItem(0);
                         return true;
                     case R.id.navigation_me:
                         mViewPager.setCurrentItem(2);
@@ -97,7 +99,7 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
 
             @Override
             public void onPageSelected(int position) {
-
+                mPagerAdapter.setCurrentFragment(position);
             }
 
             @Override
@@ -138,6 +140,22 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
+
+    @Override
+    public void setFirstData(List<GankModel.ResultsBean> list, int type) {
+
+    }
+
+    @Override
+    public void setLoadMoreData(List<GankModel.ResultsBean> list) {
+
+    }
+
+    @Override
+    public void showToast(String msg) {
+
+    }
+
     @Override
     public void showRefresh() {
 
@@ -150,21 +168,6 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
 
     @Override
     public void showError(String msg) {
-
-    }
-
-    @Override
-    public void setFirstData(GankModel gankModel, int type) {
-
-    }
-
-    @Override
-    public void setLoadMoreData(List<GankModel> list) {
-
-    }
-
-    @Override
-    public void showToast(String msg) {
 
     }
 }

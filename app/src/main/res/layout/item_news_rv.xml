@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<<<<<<< Updated upstream
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_toRightOf="@id/iv_cover"
+=======
+
+        <TextView
+            android:id="@+id/tv_news_title"
+>>>>>>> Stashed changes
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:padding="6dp"
+            android:text="Title"
+<<<<<<< Updated upstream
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:layout_toRightOf="@id/iv_cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:padding="6dp"
+            android:layout_marginRight="100dp"
+            android:text="Author"
+=======
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_media_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_news_title"
+            android:layout_marginTop="30dp"
+            android:text="Media Name"
+>>>>>>> Stashed changes
+            android:textSize="12sp"
+            android:layout_marginEnd="100dp" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+<<<<<<< Updated upstream
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_title"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="6dp"
+=======
+            android:layout_below="@id/tv_news_title"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="6dp"
+>>>>>>> Stashed changes
+            android:text="2018-01-01"
+            android:textSize="12sp"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorLine" />
+</LinearLayout>

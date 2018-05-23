@@ -14,17 +14,14 @@ import java.util.List;
 public interface NewsContract {
     interface View extends BaseView {
         //首次加载数据
-        void setFirstData(NewsModel newsModel, int type);
+        void setFirstData(List<NewsModel.Data> list, int type);
         //底部加载更多
-        void setLoadMoreData(List<NewsModel> list);
+        void setLoadMoreData(List<NewsModel.Data> list);
         //showToast
         void showToast(String msg);
     }
 
     interface Presenter extends BasePresenter<View> {
-        //加载首次数据
-        void loadFirstData(String category, int pageSize, int page);
-        //加载更多数据
-        void loadMoreData();
+        void loadData(String category, int page, int loadMoreType);
     }
 }

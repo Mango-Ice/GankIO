@@ -1,5 +1,7 @@
 package com.mangoice.gankio.model;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  * Created by MangoIce on 2017/11/25.
  */
 
-public class GankModel {
+public class GankModel implements Serializable {
     private boolean error;
     private List<ResultsBean> results;
 
@@ -28,7 +30,7 @@ public class GankModel {
         return results;
     }
 
-    public static class ResultsBean implements Serializable {
+    public static class ResultsBean implements Serializable, MultiItemEntity {
         public ResultsBean(String _id, String createdAt, String desc, String publishedAt, String source, String type, String url, boolean used, String who, List<String> images) {
             this._id = _id;
             this.createdAt = createdAt;
@@ -42,6 +44,7 @@ public class GankModel {
             this.images = images;
         }
 
+        private int itemType;
         private String _id;
         private String createdAt;
         private String desc;
@@ -117,7 +120,7 @@ public class GankModel {
             this.used = used;
         }
 
-        public Object getWho() {
+        public String getWho() {
             return who;
         }
 
@@ -131,6 +134,11 @@ public class GankModel {
 
         public void setImages(List<String> images) {
             this.images = images;
+        }
+
+        @Override
+        public int getItemType() {
+            return itemType;
         }
     }
 }
