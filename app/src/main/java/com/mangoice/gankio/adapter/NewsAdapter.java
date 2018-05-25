@@ -29,7 +29,7 @@ public class NewsAdapter extends BaseQuickAdapter<NewsModel.Data, BaseViewHolder
 
         holder.setText(R.id.tv_news_title, bean.getContent().getTitle());
         holder.setText(R.id.tv_media_name, bean.getContent().getMediaName());
-        holder.setText(R.id.tv_time, TimeUtils.getFriendlyTimeSpanByNow(TimeUtils.millis2String(bean.getContent().getPublishTime())));
+        holder.setText(R.id.tv_time, TimeUtils.millis2String(bean.getContent().getPublishTime()));
 
     }
 }

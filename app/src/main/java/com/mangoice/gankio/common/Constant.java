@@ -29,6 +29,11 @@ public class Constant {
     public static final String CATEGORY_NEWS_TECH = "news_tech";
     public static final String CATEGORY_NEWS_CAR = "news_car";
     public static final String CATEGORY_NEWS_SPORT = "news_sport";
+    public static final String CATEGORY_NEWS_FINANCE = "news_finance";
+    public static final String CATEGORY_NEWS_MILITARY = "news_military";
+    public static final String CATEGORY_NEWS_WORLD = "news_world";
+    public static final String CATEGORY_ESSAY_JOKE = "essay_joke";
+    public static final String CATEGORY_IMAGE_FUNNY = "image_funny";
 
     //默认每次获取数据的条数
     public static final int PAGE_SIZE = 10;

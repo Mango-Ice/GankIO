@@ -19,11 +19,10 @@ import com.mangoice.gankio.R;
 import com.mangoice.gankio.base.BaseActivity;
 import com.mangoice.gankio.base.BasePresenter;
 import com.mangoice.gankio.model.GankModel;
+import com.mangoice.gankio.model.NewsModel;
 import com.mangoice.gankio.utils.ToastWrapper;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by MangoIce on 2018/5/8.
@@ -31,10 +30,10 @@ import butterknife.Unbinder;
 
 public class DetailActivity extends BaseActivity {
     @BindView(R.id.webview) WebView mWebView;
-    private Unbinder mUnbinder;
     private View mView;
     private View customView;
     private GankModel.ResultsBean resultsBean;
+    private NewsModel.Content newsContent;
     private String url;
     private FrameLayout fullscreenContainer;
     private WebChromeClient.CustomViewCallback customViewCallback;
@@ -43,10 +42,13 @@ public class DetailActivity extends BaseActivity {
 
     @Override
     protected void initOptions() {
-        mUnbinder = ButterKnife.bind(this);
-
-        resultsBean = (GankModel.ResultsBean) getIntent().getSerializableExtra("entity");
-        url = resultsBean.getUrl();
+        if (getIntent().getStringExtra("type").equals("news")) {
+            newsContent = (NewsModel.Content) getIntent().getSerializableExtra("entity");
+            url = newsContent.getDisplayUrl();
+        } else {
+            resultsBean = (GankModel.ResultsBean) getIntent().getSerializableExtra("entity");
+            url = resultsBean.getUrl();
+        }
         showLoading();
         if (url.isEmpty()) {
             ToastWrapper.makeShortToast("The Web Address is error");
@@ -258,7 +260,6 @@ public class DetailActivity extends BaseActivity {
         //清除历史记录
         mWebView.clearHistory();
         mWebView.destroy();
-        mUnbinder.unbind();
         super.onDestroy();
     }
 }

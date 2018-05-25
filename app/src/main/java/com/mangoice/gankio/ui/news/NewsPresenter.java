@@ -47,9 +47,9 @@ public class NewsPresenter implements NewsContract.Presenter {
     /**
      * 固定下options
      */
-    private void setOptions() {
+    private void setOptions(String category) {
         options.clear();
-        options.put("category", Constant.CATEGORY_NEWS_HOT);     //Category
+        options.put("category", category);     //Category
         options.put("refer", String.valueOf(1));
         options.put("count", String.valueOf(Constant.PAGE_SIZE));
         options.put("min_behot_time", String.valueOf(TimeUtils.getNowMills() - 100));
@@ -65,10 +65,10 @@ public class NewsPresenter implements NewsContract.Presenter {
         options.put("cp", "");
         options.put("iid", "5463251478");
         options.put("device_id", "12345678952");
-        options.put("ac", "");
-        options.put("channel", "");
+        options.put("ac", "wifi");
+        options.put("channel", "oppo");
         options.put("aid", "");
-        options.put("app_name", "");
+        options.put("app_name", "news_article");
         options.put("version_code", "");
         options.put("version_name", "");
         options.put("device_platform", "");
@@ -78,15 +78,15 @@ public class NewsPresenter implements NewsContract.Presenter {
         options.put("ab_feature", "");
         options.put("abflag", "");
         options.put("ssmix", "");
-        options.put("device_type", "");
+        options.put("device_type", "XIAOMI");
         options.put("device_brand", "");
-        options.put("language", "");
-        options.put("os_api", "");
-        options.put("os_version", "");
+        options.put("language", "zh");
+        options.put("os_api", "23");
+        options.put("os_version", "6.0");
         options.put("openudid", "123456789d36d6z6");
         options.put("manifest_version_code", "");
         options.put("resolution", "");
-        options.put("dpi", "");
+        options.put("dpi", "440");
         options.put("update_version_code", "");
         options.put("_rticket", "");
     }
@@ -94,7 +94,7 @@ public class NewsPresenter implements NewsContract.Presenter {
     @Override
     public void loadData(String category, int page, final int loadMoreType) {
         Api api = NetManager.getInstance().getNewsApiService();
-        setOptions();
+        setOptions(category);
         api.getNewsData(options)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,6 +125,8 @@ public class NewsPresenter implements NewsContract.Presenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        mView.showError(e.toString());
+                        mView.onLoadFail();
                         mView.hideLoading();
                         mView.hideRefresh();
                     }

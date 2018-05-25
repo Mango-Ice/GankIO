@@ -17,6 +17,8 @@ public interface NewsContract {
         void setFirstData(List<NewsModel.Data> list, int type);
         //底部加载更多
         void setLoadMoreData(List<NewsModel.Data> list);
+        //加载失败
+        void onLoadFail();
         //showToast
         void showToast(String msg);
     }

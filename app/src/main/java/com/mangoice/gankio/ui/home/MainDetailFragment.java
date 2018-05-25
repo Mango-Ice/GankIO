@@ -95,6 +95,7 @@ public class MainDetailFragment extends BaseFragment<MainContract.View, MainPres
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, DetailActivity.class);
+                    intent.putExtra("type", "home");
                     intent.putExtra("entity", mList.get(position));
                     startActivity(intent);
                 }
@@ -113,11 +114,9 @@ public class MainDetailFragment extends BaseFragment<MainContract.View, MainPres
         return new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
     }
 
-
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-
     }
 
     @Override

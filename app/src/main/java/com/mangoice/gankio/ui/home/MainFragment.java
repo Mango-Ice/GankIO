@@ -6,7 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.mangoice.gankio.R;
-import com.mangoice.gankio.adapter.PagerAdapter;
+import com.mangoice.gankio.adapter.HomePagerAdapter;
 import com.mangoice.gankio.base.BaseFragment;
 import com.mangoice.gankio.base.BasePresenter;
 import com.mangoice.gankio.common.Constant;
@@ -26,7 +26,7 @@ public class MainFragment extends BaseFragment {
     TabLayout mTabLayout;
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
+    private HomePagerAdapter mPagerAdapter;
     private List<Channel> channels = new ArrayList<>();
 
     @Override
@@ -40,7 +40,7 @@ public class MainFragment extends BaseFragment {
         channels.add(new Channel(Constant.CATEGORY_RECOMMEND, "瞎推荐"));
         channels.add(new Channel(Constant.CATEGORY_APP, "APP"));
         channels.add(new Channel(Constant.CATEGORY_GIRL, "福利"));
-        mPagerAdapter = new PagerAdapter(getChildFragmentManager(), channels);
+        mPagerAdapter = new HomePagerAdapter(getChildFragmentManager(), channels);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setupWithViewPager(mViewPager);

@@ -149,6 +149,7 @@ public class NewsModel {
         private int commentCount;
         private int publishTime;
         private int diggCount;
+        private String displayUrl;
 
         public String getMediaName() { return media_name;}
 
@@ -201,6 +202,14 @@ public class NewsModel {
 
         public void setDiggCount(int digg_count) {
             this.diggCount = digg_count;
+        }
+
+        public String getDisplayUrl() {
+            return displayUrl;
+        }
+
+        public void setDisplayUrl(String display_url) {
+            this.displayUrl = display_url;
         }
     }
 

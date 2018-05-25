@@ -4,27 +4,23 @@ package com.mangoice.gankio.ui.home;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.mangoice.gankio.R;
 import com.mangoice.gankio.adapter.FragmentPagerAdapter;
-import com.mangoice.gankio.adapter.PagerAdapter;
 import com.mangoice.gankio.base.BaseActivity;
 import com.mangoice.gankio.base.BasePresenter;
-import com.mangoice.gankio.common.Constant;
-import com.mangoice.gankio.model.GankModel;
 import com.mangoice.gankio.ui.news.NewsFragment;
 import com.mangoice.gankio.utils.BottomNavigationHelper;
 import com.mangoice.gankio.utils.ResourceHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,6 +29,7 @@ import butterknife.BindView;
 public class MainActivity extends BaseActivity {
     @BindView(R.id.bottom_navigation) BottomNavigationView mBottomView;
     private FragmentPagerAdapter mPagerAdapter;
+    private Fragment currentFragment = new Fragment();
 
     @Override
     protected void initOptions() {
@@ -50,9 +47,9 @@ public class MainActivity extends BaseActivity {
                         showHideFragment(mPagerAdapter.getItem(1));
                         return true;
                     case R.id.navigation_weather:
-                        break;
+                        return true;
                     case R.id.navigation_express:
-                        break;
+                        return true;
                     case R.id.navigation_me:
                         return true;
                 }
@@ -63,20 +60,30 @@ public class MainActivity extends BaseActivity {
 
     private void showHideFragment(Fragment showFragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.show(showFragment);
-        for (Fragment fragment : mPagerAdapter.getAllFragment()) {
-            if (fragment != null && fragment != showFragment) {
-                ft.hide(fragment);
+        if (!showFragment.isAdded()) {
+            if (currentFragment != null) {
+                ft.hide(currentFragment);
             }
+            ft.add(R.id.fragment, showFragment);
+        } else {
+            ft.hide(currentFragment).show(showFragment);
         }
+//        for (Fragment fragment : mPagerAdapter.getAllFragment()) {
+//            if (fragment != null && fragment != showFragment) {
+//                ft.hide(fragment);
+//            }
+//        }
+        currentFragment = showFragment;
         ft.commit();
     }
 
     private void initFragment() {
         mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(MainFragment.newInstance(), "主页");
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mPagerAdapter.getItem(0)).commit();
-        //mPagerAdapter.addFragment(NewsFragment.newInstance(), "头条");
+        mPagerAdapter.addFragment(NewsFragment.newInstance(), "头条");
+
+        showHideFragment(mPagerAdapter.getItem(0));
+        //getSupportFragmentManager().beginTransaction().add(R.id.fragment, mPagerAdapter.getItem(0)).commit();
     }
 
     @Override

@@ -72,6 +72,7 @@ public class MainPresenter implements MainContract.Presenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        mView.showError(e.toString());
                         mView.onLoadFail();
                         mView.hideLoading();
                         mView.hideRefresh();

@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * Created by MangoIce on 2018/5/24.
  */
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class HomePagerAdapter extends FragmentStatePagerAdapter {
     private List<Channel> mChannels;
 
-    public PagerAdapter(FragmentManager fm, List<Channel> channels) {
+    public HomePagerAdapter(FragmentManager fm, List<Channel> channels) {
         super(fm);
         this.mChannels = channels;
     }
