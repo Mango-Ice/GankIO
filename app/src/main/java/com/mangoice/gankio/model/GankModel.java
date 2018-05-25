@@ -31,18 +31,6 @@ public class GankModel implements Serializable {
     }
 
     public static class ResultsBean implements Serializable, MultiItemEntity {
-        public ResultsBean(String _id, String createdAt, String desc, String publishedAt, String source, String type, String url, boolean used, String who, List<String> images) {
-            this._id = _id;
-            this.createdAt = createdAt;
-            this.desc = desc;
-            this.publishedAt = publishedAt;
-            this.source = source;
-            this.type = type;
-            this.url = url;
-            this.used = used;
-            this.who = who;
-            this.images = images;
-        }
 
         private int itemType;
         private String _id;
@@ -140,5 +128,7 @@ public class GankModel implements Serializable {
         public int getItemType() {
             return itemType;
         }
+
+        public void setItemType(int type) { this.itemType = type; }
     }
 }

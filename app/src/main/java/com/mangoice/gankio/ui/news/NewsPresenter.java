@@ -1,12 +1,9 @@
-package com.mangoice.gankio.news;
+package com.mangoice.gankio.ui.news;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.mangoice.gankio.R;
 import com.mangoice.gankio.common.Constant;
-import com.mangoice.gankio.main.MainContract;
-import com.mangoice.gankio.model.GankModel;
 import com.mangoice.gankio.model.NewsModel;
 import com.mangoice.gankio.net.Api;
 import com.mangoice.gankio.net.NetManager;

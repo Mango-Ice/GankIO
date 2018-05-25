@@ -43,19 +43,20 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public abstract class BaseFragment<V extends BaseView, T extends BasePresenter<V>> extends Fragment {
-    @BindView(R.id.fragment_rv) RecyclerView mRecyclerView;
-    @BindView(R.id.fragment_loading_view) AVLoadingIndicatorView mLoadingView;
-    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout mRefreshView;
+    @Nullable
+    @BindView(R.id.fragment_loading_view)
+    AVLoadingIndicatorView mLoadingView;
+    @Nullable
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout mRefreshView;
     protected Context mContext;
     private Unbinder unbinder;
     private View mRootView;
     private boolean isFragmentVisible;
     private boolean isReuseView;
     private boolean isFirstVisible;
-    protected int mPage = 1;
     protected T presenter;
-    //是否可以加载更多
-    protected boolean isLoadMore = true;
+
 
     @Override
     public void onAttach(Context context) {
@@ -70,6 +71,7 @@ public abstract class BaseFragment<V extends BaseView, T extends BasePresenter<V
         if (presenter != null) {
             presenter.attachView((V) this);
         }
+        initVariable();
     }
 
     /**
@@ -151,6 +153,15 @@ public abstract class BaseFragment<V extends BaseView, T extends BasePresenter<V
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initVariable();
+//        if (mRootView != null) {
+//            ViewGroup parent = (ViewGroup) mRootView.getParent();
+//            if (parent != null) {
+//                parent.removeView(mRootView);
+//            }
+//        } else {
+//            mRootView = inflater.inflate(getContentLayout(), container, false);
+//            unbinder = ButterKnife.bind(this, mRootView);
+//        }
         mRootView = inflater.inflate(getContentLayout(), container, false);
         unbinder = ButterKnife.bind(this, mRootView);
         return mRootView;
@@ -171,97 +182,59 @@ public abstract class BaseFragment<V extends BaseView, T extends BasePresenter<V
                 isFragmentVisible = true;
             }
         }
-
-        //设置RecyclerView
-        mRecyclerView.setLayoutManager(initLayoutManager());
-        //mBaseAdapter = new BaseAdapter(mContext, mList, initItemType());
-        //mGankAdapter = new GankAdapter(mList, mContext);
-        //mGankAdapter.setEnableLoadMore(true);
-        //mGankAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        mRecyclerView.setAdapter(setRVAdapter());
         //设置下拉刷新的颜色
-        mRefreshView.setColorSchemeColors(ResourceHelper.getColor(R.color.colorPrimary));
-        initListener();
-        initItemListener();
+        if (mRefreshView != null) {
+            mRefreshView.setColorSchemeColors(ResourceHelper.getColor(R.color.colorPrimary));
 
-        //开始请求数据
-        showLoading();
+            mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    initRefreshListener();
+                }
+            });
+        }
         initOptions();
-        //getDataFromService(Constant.GET_DATA_TYPE_NORMAL);
-    }
-
-    protected abstract RecyclerView.Adapter setRVAdapter();
-
-    private void initListener() {
-        mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPage = 1;
-                //getDataFromService(Constant.GET_DATA_TYPE_NORMAL);
-            }
-        });
-        //mRecyclerView.addOnScrollListener(new RecyclerViewScrollListener());
+        super.onViewCreated(isReuseView ? mRootView : view, savedInstanceState);
     }
 
     /**
-     * 初始化LayoutManager，默认为LinearLayoutManager
-     * 子类可实现其他布局
+     * 设置下拉刷新操作
      */
-    protected RecyclerView.LayoutManager initLayoutManager() {
-        return new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-    }
-
-    /**
-     * 单个条目的单击事件监听，由子类选择是否实现
-     */
-    protected void initItemListener() {
-
-    }
-
-    /**
-     * 初始化布局类型，默认为文本类型
-     * @return
-     */
-    protected int initItemType() {
-        return Constant.ITEM_TYPE_NEWS_TEXT;
-    }
+    protected abstract void initRefreshListener();
 
     /**
      * 开启下拉刷新
      */
     public void showRefresh() {
-        mRefreshView.setRefreshing(true);
+        if (mRefreshView != null) {
+            mRefreshView.setRefreshing(true);
+        }
+
     }
 
     /**
      * 关闭下拉刷新
      */
     public void hideRefresh() {
-        if (mRefreshView.isRefreshing()) {
+        if (mRefreshView != null && mRefreshView.isRefreshing()) {
             mRefreshView.setRefreshing(false);
         }
     }
-
-
-    /**
-     * 加载接口分类
-     *
-     * @return
-     */
-    public abstract String getApiCategroy();
 
     /**
      * 显示加载等待动画
      */
     public void showLoading() {
-        mLoadingView.smoothToShow();
+        if (mLoadingView != null) {
+            mLoadingView.smoothToShow();
+        }
     }
 
     /**
      * 隐藏加载动画
      */
     public void hideLoading() {
-        if (mLoadingView.isShown()) {
+        if (mLoadingView != null && mLoadingView.isShown()) {
             mLoadingView.smoothToHide();
         }
     }
@@ -270,46 +243,6 @@ public abstract class BaseFragment<V extends BaseView, T extends BasePresenter<V
      * 子类实现具体操作
      */
     protected abstract void initOptions();
-    
-//    class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
-//        @Override
-//        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//            super.onScrollStateChanged(recyclerView, newState);
-//            int lastPosition = -1;
-//            //当前状态位停止状态
-//            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-//                if (layoutManager instanceof LinearLayoutManager) {
-//                    lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-//                } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-//                    int[] lastPositions = new int[((StaggeredGridLayoutManager) layoutManager).getSpanCount()];
-//                    ((StaggeredGridLayoutManager) layoutManager).findFirstVisibleItemPositions(lastPositions);
-//                    lastPosition = findMax(lastPositions);
-//                }
-//                //判断当前列表是否滑动到底部
-//                if (!mRecyclerView.canScrollVertically(1)) {
-//                    //滑动到底部，需要触发上拉加载更多操作
-//                    mRecyclerView.smoothScrollToPosition(lastPosition);
-//                    if (!isLoadMore) {
-//                        ToastWrapper.makeShortToast("没有更多数据了");
-//                        return;
-//                    }
-//
-//                    mPage++;
-//                    getDataFromService(Constant.GET_DATA_TYPE_LOAD_MORE);
-//                }
-//            }
-//        }
-//
-//        private int findMax(int[] lastPositions) {
-//            int max = lastPositions[0];
-//            for (int value : lastPositions) {
-//                if (value > max) {
-//                    max = value;
-//                }
-//            }
-//            return max;
-//        }
 
 
     @Override

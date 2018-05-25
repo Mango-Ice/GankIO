@@ -12,7 +12,6 @@ import java.util.List;
 public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
     private final List<Fragment> fragments = new ArrayList<>();
     private final List<String> titles = new ArrayList<>();
-    private int currentFragment;
 
     public FragmentPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -28,8 +27,8 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
         titles.clear();
     }
 
-    public void setCurrentFragment(int currentFragment) {
-        this.currentFragment = currentFragment;
+    public List<Fragment> getAllFragment() {
+        return fragments;
     }
 
     @Override

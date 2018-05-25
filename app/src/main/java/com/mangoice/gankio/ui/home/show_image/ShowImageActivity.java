@@ -1,4 +1,4 @@
-package com.mangoice.gankio.main.show_image;
+package com.mangoice.gankio.ui.home.show_image;
 
 import android.support.v4.view.ViewPager;
 import android.view.Menu;

@@ -1,4 +1,4 @@
-package com.mangoice.gankio.detail;
+package com.mangoice.gankio.ui.detail;
 
 import android.content.Context;
 import android.content.Intent;

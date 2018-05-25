@@ -2,6 +2,7 @@ package com.mangoice.gankio.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -27,7 +28,7 @@ public class GankAdapter extends BaseMultiItemQuickAdapter<GankModel.ResultsBean
         super(data);
         this.mContext = context;
         addItemType(Constant.ITEM_TYPE_GANK_TEXT, R.layout.item_gank_rv);
-        addItemType(Constant.ITEM_TYPE_GANK_IMAGE, R.layout.item_gank_rv);
+        addItemType(Constant.ITEM_TYPE_GANK_IMAGE, R.layout.item_gank_girl_rv);
     }
 
     @Override
@@ -51,6 +52,14 @@ public class GankAdapter extends BaseMultiItemQuickAdapter<GankModel.ResultsBean
                 }
                 break;
             case Constant.ITEM_TYPE_GANK_IMAGE:
+                ViewGroup.LayoutParams lp = holder.getView(R.id.card_view).getLayoutParams();
+                lp.height = (int) (Math.random() * 300 + 500);
+                holder.getView(R.id.card_view).setLayoutParams(lp);
+                holder.getView(R.id.iv_girl).setTag(R.id.iv_girl, bean.getUrl());
+                ImageUtils.getInstance()
+                        .loadImage(mContext,
+                                bean.getUrl(),
+                                (ImageView) holder.getView(R.id.iv_girl));
                 break;
         }
     }

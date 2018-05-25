@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity" />
+        <activity android:name=".ui.home.MainActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/ThemeSplash">
@@ -26,9 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".detail.DetailActivity"
+        <activity android:name=".ui.detail.DetailActivity"
             android:hardwareAccelerated="true" />
-        <activity android:name=".main.show_image.ShowImageActivity"
+        <activity android:name=".ui.home.show_image.ShowImageActivity"
             android:theme="@style/ThemeShowImage"/>
     </application>
 

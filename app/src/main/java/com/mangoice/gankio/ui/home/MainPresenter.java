@@ -1,4 +1,4 @@
-package com.mangoice.gankio.main;
+package com.mangoice.gankio.ui.home;
 
 import android.support.annotation.NonNull;
 
@@ -31,7 +31,7 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void loadData(String category, int pageSize, int page, final int loadMoreType) {
+    public void loadData(final String category, int pageSize, int page, final int loadMoreType) {
         Api api = NetManager.getInstance().getApiService();
         api.getGankData(category, Constant.PAGE_SIZE, page)
                 .subscribeOn(Schedulers.io())
@@ -48,23 +48,31 @@ public class MainPresenter implements MainContract.Presenter {
                             ToastWrapper.makeShortToast(ResourceHelper.getString(R.string.network_error));
                             return;
                         }
+                        if (Constant.CATEGORY_GIRL.equals(category)) {
+                            for (GankModel.ResultsBean bean : gankModel.getResults()) {
+                                bean.setItemType(Constant.ITEM_TYPE_GANK_IMAGE);
+                            }
+                        } else {
+                            for (GankModel.ResultsBean bean : gankModel.getResults()) {
+                                bean.setItemType(Constant.ITEM_TYPE_GANK_TEXT);
+                            }
+                        }
                         if (Constant.GET_DATA_TYPE_NORMAL == loadMoreType) {
                             mList.clear();
                             mList = gankModel.getResults();
                             mView.setFirstData(mList, Constant.GET_DATA_TYPE_NORMAL);
-                            mView.hideLoading();
-                            mView.hideRefresh();
                         } else {
                             //加载更多
                             mList.addAll(gankModel.getResults());
                             mView.setLoadMoreData(mList);
-                            mView.hideLoading();
-                            mView.hideRefresh();
                         }
+                        mView.hideLoading();
+                        mView.hideRefresh();
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        mView.onLoadFail();
                         mView.hideLoading();
                         mView.hideRefresh();
                     }
@@ -76,7 +84,6 @@ public class MainPresenter implements MainContract.Presenter {
                     }
                 });
     }
-
 
 
     @Override

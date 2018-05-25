@@ -1,20 +1,11 @@
 package com.mangoice.gankio.adapter;
 
-<<<<<<< Updated upstream
-/**
- * Created by MangoIce on 2018/5/23.
- */
-public class NewsAdapter {
-=======
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mangoice.gankio.R;
-import com.mangoice.gankio.common.Constant;
 import com.mangoice.gankio.model.NewsModel;
 import com.mangoice.gankio.utils.TimeUtils;
 
@@ -41,5 +32,4 @@ public class NewsAdapter extends BaseQuickAdapter<NewsModel.Data, BaseViewHolder
         holder.setText(R.id.tv_time, TimeUtils.getFriendlyTimeSpanByNow(TimeUtils.millis2String(bean.getContent().getPublishTime())));
 
     }
->>>>>>> Stashed changes
 }

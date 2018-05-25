@@ -93,15 +93,6 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseViewHolder
         return mList.size();
     }
 
-    public void setOnBaseClickListener(OnBaseClickListener listener) {
-        this.onBaseClickListener = listener;
-    }
-
-    public void setListData(List<GankModel.ResultsBean> list) {
-        this.mList = list;
-        notifyDataSetChanged();
-    }
-
     class BaseViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         ImageView imageViewGirl;
