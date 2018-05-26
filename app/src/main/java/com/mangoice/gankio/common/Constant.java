@@ -8,6 +8,8 @@ public class Constant {
     //Api
     public static final String GANK_URL = "http://gank.io/api/";  //Gank.io
     public static final String NEWS_URL = "http://is.snssdk.com/api/news/feed/";  //头条
+    public static final String WEATHER_URL = "http://aider.meizu.com/app/weather/";  //魅族天气
+    public static final String EXPRESS_URL = "http://www.kuaidi100.com/";  //快递100
 
     //Gank.io
     public static final String CATEGORY_ALL = "all";

@@ -1,11 +1,15 @@
 package com.mangoice.gankio.base;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.mangoice.gankio.R;
@@ -21,6 +25,8 @@ public abstract class BaseActivity<V extends BaseView, T extends BasePresenter<V
     LinearLayout mRootView;
     private Unbinder mUnbinder;
     protected T mPresenter;
+    protected boolean isToolbarShow;
+    protected Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public abstract class BaseActivity<V extends BaseView, T extends BasePresenter<V
         if (initToolbarTitle() == null) {
             mToolbar.setVisibility(View.GONE);
         } else {
+            mToolbar.setVisibility(View.VISIBLE);
             mToolbar.setTitle(initToolbarTitle());
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -69,10 +76,36 @@ public abstract class BaseActivity<V extends BaseView, T extends BasePresenter<V
     }
 
     /**
+     * 沉浸式状态栏
+     *
+     */
+    public void setToolbarInside() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        } else {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
+
+    /**
      * 加载Toolbar标题
+     *
      * @return
      */
     protected abstract String initToolbarTitle();
+
+
+    protected void setToolbar() {
+        initToolbar();
+        //setToolbarInside();
+    }
 
     /**
      * 设置Toolbar返回按钮是否开启
@@ -88,6 +121,7 @@ public abstract class BaseActivity<V extends BaseView, T extends BasePresenter<V
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_base, menu);
         updateOptionsMenu(menu);
         return true;
@@ -126,19 +160,6 @@ public abstract class BaseActivity<V extends BaseView, T extends BasePresenter<V
         mLoading.smoothToHide();
     }
 
-    /**
-     * 分享
-     *
-     * @param type
-     */
-    public void startShare(String type, String content) {
-        Intent share_intent = new Intent();
-        share_intent.setAction(Intent.ACTION_SEND);
-        share_intent.setType(type);
-        share_intent.putExtra(Intent.EXTRA_TEXT, content);
-        share_intent = Intent.createChooser(share_intent, "分享");
-        startActivity(share_intent);
-    }
 
     @Override
     protected void onDestroy() {
